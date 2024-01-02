@@ -2,8 +2,9 @@ from dlpack import buffer
 
 import pytest
 
+
 def test_from_ndarray():
-    numpy = pytest.importorskip('numpy')
+    numpy = pytest.importorskip("numpy")
 
     arr = numpy.array([[1, 2], [3, 4]], dtype=numpy.int32)
     buf = buffer.Buffer(arr, flags=buffer.PyBUF_RECORDS_RO)
@@ -13,7 +14,7 @@ def test_from_ndarray():
     assert buf.itemsize == arr.dtype.itemsize
     assert buf.format == arr.dtype.char
     d = arr.__array_interface__
-    assert buf.pointer == d['data'][0]
+    assert buf.pointer == d["data"][0]
 
 
 def test_from_bytes():
@@ -23,4 +24,4 @@ def test_from_bytes():
     assert buf.shape == (3,)
     assert buf.strides == (1,)
     assert buf.itemsize == 1
-    assert buf.format == 'B'
+    assert buf.format == "B"

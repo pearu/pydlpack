@@ -1,5 +1,5 @@
-
 from dlpack import Capsule
+
 
 def test_new():
     o = object()
@@ -9,11 +9,13 @@ def test_new():
     assert not c.is_valid("notmycapsule")
     assert c.get_pointer("mycapsule") == id(o)
 
+
 def test_new_name_is_None():
     o = object()
     c = Capsule.new(id(o), None)  # name is None
     assert c.get_name() == None
     assert c.get_pointer(None) == id(o)
+
 
 def test_set_name():
     o = object()
@@ -26,6 +28,7 @@ def test_set_name():
     assert not c.is_valid("mycapsule")
     assert c.is_valid("yourcapsule")
 
+
 def test_set_name_is_None():
     o = object()
     c = Capsule.new(id(o), None)
@@ -37,6 +40,7 @@ def test_set_name_is_None():
     assert not c.is_valid(None)
     assert c.is_valid("mycapsule")
 
+
 def test_set_pointer():
     o = object()
     o2 = object()
@@ -46,6 +50,7 @@ def test_set_pointer():
     c.set_pointer(id(o2))
     assert c.get_pointer(None) == id(o2)
     assert c.is_valid(None)
+
 
 def test_set_context():
     o = object()
@@ -59,8 +64,8 @@ def test_set_context():
     assert c.get_context() is None
     assert c.is_valid(None)
 
-def test_destructor():
 
+def test_destructor():
     o = object()
     destructor_is_called = []
 
@@ -78,8 +83,8 @@ def test_destructor():
 
     assert len(destructor_is_called) == 1
 
-def test_set_destructor():
 
+def test_set_destructor():
     o = object()
     destructor_is_called = []
 

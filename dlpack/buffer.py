@@ -3,7 +3,7 @@
 # Created: December 2023
 # Author: Pearu Peterson
 
-__all__ = ['Buffer']
+__all__ = ["Buffer"]
 
 import ctypes
 
@@ -14,8 +14,8 @@ import ctypes
 
 Py_ssize_t = ctypes.c_ssize_t
 
-class Py_Buffer(ctypes.Structure):
 
+class Py_Buffer(ctypes.Structure):
     _fields_ = [
         ("buf", ctypes.c_void_p),
         ("obj", ctypes.py_object),
@@ -34,14 +34,16 @@ class Py_Buffer(ctypes.Structure):
         args = []
         for field, typ in self._fields_:
             value = getattr(self, field)
-            if typ.__name__.startswith('LP_') and hasattr(self, "ndim"):
+            if typ.__name__.startswith("LP_") and hasattr(self, "ndim"):
                 if ctypes.cast(value, ctypes.c_void_p).value is None:
                     value = None
                 else:
                     value = tuple(value[i] for i in range(self.ndim))
-            args.append(f'{field}={value}')
+            args.append(f"{field}={value}")
         args = ", ".join(args)
-        return f'{type(self).__name__}({args})'
+        return f"{type(self).__name__}({args})"
+
+
 #
 # int PyObject_GetBuffer(PyObject *exporter, Py_buffer *view, int flags)
 #
@@ -89,15 +91,15 @@ PyBUF_STRIDED = PyBUF_STRIDES | PyBUF_WRITABLE
 PyBUF_STRIDED_RO = PyBUF_STRIDES
 PyBUF_CONTIG = PyBUF_ND | PyBUF_WRITABLE
 PyBUF_CONTIG_RO = PyBUF_ND
-    
+
 
 class Buffer:
     """A buffer view of an object that implements the Python buffer
     protocol.
     """
+
     def __init__(self, obj, flags=PyBUF_SIMPLE):
-        """View object via buffer protocol using specified flags.
-        """
+        """View object via buffer protocol using specified flags."""
         buf = Py_Buffer()
         status = ctypes.pythonapi.PyObject_GetBuffer(obj, ctypes.pointer(buf), flags)
         if status != 0:

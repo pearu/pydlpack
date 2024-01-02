@@ -3,7 +3,7 @@
 # Created: December 2023
 # Author: Pearu Peterson
 
-__all__ = ['Capsule']
+__all__ = ["Capsule"]
 
 import ctypes
 
@@ -88,8 +88,7 @@ ctypes.pythonapi.PyCapsule_Import.argtypes = [PyCapsule, ctypes.c_int]
 
 
 class Capsule:
-    """OOP wrapper of a PyCapsule object
-    """
+    """OOP wrapper of a PyCapsule object"""
 
     @classmethod
     def new(cls, pointer: int, name: str, destructor=None):
@@ -114,12 +113,12 @@ class Capsule:
         return obj
 
     def __init__(self, capsule):
-        """Wrapper of an existing PyCapsule object.
-        """
-        if not (type(capsule).__name__ == 'PyCapsule' and type(capsule).__module__ == 'builtins'
-                or isinstance(capsule, PyCapsule)): 
+        """Wrapper of an existing PyCapsule object."""
+        if not (
+            type(capsule).__name__ == "PyCapsule" and type(capsule).__module__ == "builtins" or isinstance(capsule, PyCapsule)
+        ):
             # ctypes does not expose PyCapsule_CheckExact
-            raise TypeError(f'expected capsule object but got {type(capsule).__module__}.{type(capsule).__name__}')
+            raise TypeError(f"expected capsule object but got {type(capsule).__module__}.{type(capsule).__name__}")
         self.capsule = capsule
 
     def is_valid(self, name: str) -> bool:
@@ -132,15 +131,13 @@ class Capsule:
         return bool(ctypes.pythonapi.PyCapsule_IsValid(self.capsule, name))
 
     def get_pointer(self, name: str) -> int:
-        """Retrieve the pointer stored in the capsule.
-        """
+        """Retrieve the pointer stored in the capsule."""
         if isinstance(name, str):
             name = name.encode()
         return ctypes.pythonapi.PyCapsule_GetPointer(self.capsule, name)
 
     def set_pointer(self, pointer: int):
-        """Set the void pointer inside capsule to pointer. The pointer may not be 0.
-        """
+        """Set the void pointer inside capsule to pointer. The pointer may not be 0."""
         status = ctypes.pythonapi.PyCapsule_SetPointer(self.capsule, pointer)
         assert status == 0
 
@@ -155,8 +152,7 @@ class Capsule:
         return name
 
     def set_name(self, name: str):
-        """Set the name inside capsule to name. The name can be None.
-        """
+        """Set the name inside capsule to name. The name can be None."""
         if isinstance(name, str):
             name = name.encode()
         status = ctypes.pythonapi.PyCapsule_SetName(self.capsule, name)
@@ -165,33 +161,30 @@ class Capsule:
         self.__name = name
 
     def get_context(self) -> int:
-        """Return the current context stored in the capsule.
-        """
+        """Return the current context stored in the capsule."""
         context = ctypes.pythonapi.PyCapsule_GetContext(self.capsule)
         return context
 
     def set_context(self, context: int):
-        """Set the context pointer inside capsule to context. The context can be 0.
-        """
+        """Set the context pointer inside capsule to context. The context can be 0."""
         status = ctypes.pythonapi.PyCapsule_SetContext(self.capsule, context)
         assert status == 0
 
     def get_destructor(self) -> PyCapsule_Destructor:
-        """Return the current destructor stored in the capsule.
-        """
+        """Return the current destructor stored in the capsule."""
         return ctypes.pythonapi.PyCapsule_GetDestructor(self.capsule)
 
     # User-provided destructors must outlive capsules.
     registered_destructors = dict()
 
     def set_destructor(self, destructor: PyCapsule_Destructor):
-        """Set the destructor inside capsule to destructor. The destructor can be 0.
-        """
+        """Set the destructor inside capsule to destructor. The destructor can be 0."""
         if isinstance(destructor, PyCapsule_Destructor):
             capsule_destructor = destructor
         elif destructor is None:
-            capsule_destructor = ctypes.cast(None, PyCapsule_Destructor)            
+            capsule_destructor = ctypes.cast(None, PyCapsule_Destructor)
         else:
+
             @PyCapsule_Destructor
             def capsule_destructor(capsule_ptr):
                 # Warning: raw_capsule is py_object that value must
@@ -213,8 +206,10 @@ class Capsule:
 # Sanity check:
 import atexit
 import gc
+
+
 @atexit.register
 def _registered_destructors_atexit():
     gc.collect()
     if len(Capsule.registered_destructors) > 0:
-        print(f'dlpack: {len(Capsule.registered_destructors)} Capsule destructors have leaked!!!')
+        print(f"dlpack: {len(Capsule.registered_destructors)} Capsule destructors have leaked!!!")

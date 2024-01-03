@@ -181,8 +181,30 @@ def buffer_samples():
     import array
 
     yield array.array("d", [1.0, 2.0, 3.14])
-    # yield array.array('u', 'hello \u2641')
     yield array.array("l", [1, 2, 3, 4, 5])
+    try:
+        import numpy, tempfile
+
+        tmp = tempfile.NamedTemporaryFile(delete=False)
+        fname = tmp.name
+        fp = numpy.memmap(fname, shape=(2, 3), dtype=numpy.int32, mode="w+")
+        fp[0] = [1, 2, 3]
+        fp[1] = [4, 5, 6]
+        yield fp
+        fp.flush()
+        fp._mmap.close()
+        tmp.file.close()
+        import mmap
+
+        f = open(fname, "r")
+        fp = mmap.mmap(f.fileno(), 0, prot=mmap.PROT_READ)
+        yield fp
+        fp.close()
+        import os
+
+        os.remove(fname)
+    except ImportError:
+        pass
 
 
 def dtypes(backend):
@@ -501,11 +523,15 @@ def test_asdlpack_buffer(backend):
             # todo: detect misalignment in shapes, strides as well,
             # also check aligment of created structures and the
             # addresses of destructors
+            if type(obj).__name__ in {"memmap", "mmap"}:
+                # Check failed: IsAligned()
+                continue
         count += 1
         a = from_dlpack(dl)
-        a1 = numpy.from_dlpack(dl)  # just to get dtype estimate
-        a2 = numpy.frombuffer(obj, dtype=a1.dtype)
+        a1 = numpy.from_dlpack(dl)  # just to get dtype and shape estimates
+        a2 = numpy.frombuffer(obj, dtype=a1.dtype).reshape(a1.shape)
         a3 = from_dlpack(a2.copy())
         assert_equal(a, a3)
+        del a2  # make that buffer is released so that mmap can close
     if count == 0:
         pytest.skip("NO SAMPLES!")

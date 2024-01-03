@@ -1,38 +1,55 @@
+[![Python package](https://github.com/pearu/pydlpack/actions/workflows/python-package.yml/badge.svg)](https://github.com/pearu/pydlpack/actions/workflows/python-package.yml) [![Conda Version](https://img.shields.io/conda/vn/conda-forge/pydlpack.svg)](https://anaconda.org/conda-forge/pydlpack)
+
 pydlpack
 ========
 
 This package provides tools for exchanging data buffers of Python
 objects to any DLPack consumer. The producers of Python objects must
-support one (or more) of the following protocols:
+support one of the following protocols:
 
-- DLPack
-- NumPy Array Interface version 3
-- Numba CUDA Array Interface versions 2 and 3
-- Python Buffer protocol
+- [DLPack](https://github.com/dmlc/dlpack/)
+- [Array Interface Protocol, version 3](https://numpy.org/doc/stable/reference/arrays.interface.html)
+- [CUDA Array Interface, version 3](https://numba.readthedocs.io/en/stable/cuda/cuda_array_interface.html)
+- [Python Buffer protocol](https://docs.python.org/3/c-api/buffer.html)
 
-NumPy Array Interface version 2 support can be provided on request.
+[Array Interface Protocol, version 2](https://numpy.org/doc/stable/reference/arrays.interface.html#differences-with-array-interface-version-2) support can be provided on request.
 
 Currently, the package is tested with the following consumers
 
-- NumPy
-- PyTorch
-- CuPy
-- Numba
-- Jax
-- Tensorflow
-- Cudf
+- [NumPy](https://numpy.org/), [from_dlpack](https://numpy.org/devdocs/reference/generated/numpy.from_dlpack.html)
+- [PyTorch](https://pytorch.org/), [from_dlpack](https://pytorch.org/docs/stable/generated/torch.from_dlpack.html)
+- [CuPy](https://cupy.dev/), [from_dlpack](https://docs.cupy.dev/en/stable/reference/generated/cupy.from_dlpack.html)
+- [Jax](https://github.com/google/jax), [from_dlpack](https://jax.readthedocs.io/en/latest/_autosummary/jax.dlpack.from_dlpack.html)
+- [Tensorflow](https://www.tensorflow.org/), [from_dlpack](https://www.tensorflow.org/api_docs/python/tf/experimental/dlpack/from_dlpack)
+- [cuDF](https://github.com/rapidsai/cudf), [from_dlpack](https://docs.rapids.ai/api/cudf/latest/user_guide/api_docs/api/cudf.from_dlpack/)
 
 using the following provider objects with devices:
 
-- Numpy ndarray, CPU
-- Torch Tensor, CPU and CUDA
-- CuPy ndarray, CUDA
-- Numba DeviceNDArray, CUDA
-- Jax numpy.ndarray, CPU and CUDA
-- Tensorflow Tensor, CPU
-- Python bytes, CPU
-- Python bytearray, CPU
-- Python array.array, CPU
+- Numpy [ndarray](https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html), CPU
+- Torch [Tensor](https://pytorch.org/docs/stable/tensors.html), CPU and CUDA
+- CuPy [ndarray](https://docs.cupy.dev/en/stable/reference/generated/cupy.ndarray.html), CUDA
+- [Numba](https://numba.pydata.org/) [DeviceNDArray](https://numba.readthedocs.io/en/stable/cuda/cuda_array_interface.html#numba.cuda.as_cuda_array), CUDA
+- Jax [Array](https://jax.readthedocs.io/en/latest/_autosummary/jax.Array.html), CPU and CUDA
+- Tensorflow [Tensor](https://www.tensorflow.org/api_docs/python/tf/Tensor), CPU
+- Python [bytes](https://docs.python.org/3/library/stdtypes.html#bytes), CPU
+- Python [bytearray](https://docs.python.org/3/library/stdtypes.html#bytearray), CPU
+- Python [array](https://docs.python.org/3/library/array.html), CPU
+- Numpy [memmap](https://numpy.org/doc/stable/reference/generated/numpy.memmap.html), CPU
+- Python [mmap](https://docs.python.org/3/library/mmap.html), CPU
+
+Install
+-------
+
+- [pydlpack Conda Forge](https://github.com/conda-forge/pydlpack-feedstock)
+  ```sh
+  conda install pydlpack
+  ```
+
+- [pydlpack in PyPi](https://pypi.org/project/pydlpack/):
+
+  ```sh
+  pip install pydlpack
+  ```
 
 Basic usage
 -----------
@@ -93,6 +110,6 @@ DLPack-compatible objects that are available in a particular
 environment. For example:
 
 ```python
->>> import dlpack, os, pytest 
->>> pytest.main([os.path.dirname(dlpack.__file__), "-xq"])
+>>> import dlpack.tests
+>>> dlpack.tests.run()
 ```

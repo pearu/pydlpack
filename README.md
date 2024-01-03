@@ -3,11 +3,13 @@
 pydlpack
 ========
 
-This package provides tools for exchanging data buffers of Python
-objects to any DLPack consumer. The producers of Python objects must
-support one of the following protocols:
+PyDLPack is a Python library for exchanging data between different
+array libraries using [DLPack: Open In Memory Tensor
+Structure]((https://github.com/dmlc/dlpack/). The provider library
+does not need to implement the DLPack support, it will be sufficent if
+the provider library implements one of the following protocols:
 
-- [DLPack](https://github.com/dmlc/dlpack/)
+- [dmlc/dlpack](https://github.com/dmlc/dlpack/)
 - [Array Interface Protocol, version 3](https://numpy.org/doc/stable/reference/arrays.interface.html)
 - [CUDA Array Interface, version 3](https://numba.readthedocs.io/en/stable/cuda/cuda_array_interface.html)
 - [Python Buffer protocol](https://docs.python.org/3/c-api/buffer.html)
@@ -16,31 +18,31 @@ support one of the following protocols:
 
 Currently, the package is tested with the following consumers
 
-- [NumPy](https://numpy.org/), [from_dlpack](https://numpy.org/devdocs/reference/generated/numpy.from_dlpack.html)
-- [PyTorch](https://pytorch.org/), [from_dlpack](https://pytorch.org/docs/stable/generated/torch.from_dlpack.html)
-- [CuPy](https://cupy.dev/), [from_dlpack](https://docs.cupy.dev/en/stable/reference/generated/cupy.from_dlpack.html)
-- [Jax](https://github.com/google/jax), [from_dlpack](https://jax.readthedocs.io/en/latest/_autosummary/jax.dlpack.from_dlpack.html)
-- [Tensorflow](https://www.tensorflow.org/), [from_dlpack](https://www.tensorflow.org/api_docs/python/tf/experimental/dlpack/from_dlpack)
-- [cuDF](https://github.com/rapidsai/cudf), [from_dlpack](https://docs.rapids.ai/api/cudf/latest/user_guide/api_docs/api/cudf.from_dlpack/)
+- [NumPy](https://numpy.org/), [`numpy.from_dlpack`](https://numpy.org/devdocs/reference/generated/numpy.from_dlpack.html)
+- [PyTorch](https://pytorch.org/), [`torch.from_dlpack`](https://pytorch.org/docs/stable/generated/torch.from_dlpack.html)
+- [CuPy](https://cupy.dev/), [`cupy.from_dlpack`](https://docs.cupy.dev/en/stable/reference/generated/cupy.from_dlpack.html)
+- [Jax](https://github.com/google/jax), [`jax.numpy.from_dlpack`](https://jax.readthedocs.io/en/latest/_autosummary/jax.dlpack.from_dlpack.html)
+- [Tensorflow](https://www.tensorflow.org/), [`tf.experimental.dlpack.from_dlpack`](https://www.tensorflow.org/api_docs/python/tf/experimental/dlpack/from_dlpack)
+- [cuDF](https://github.com/rapidsai/cudf), [`cudf.from_dlpack`](https://docs.rapids.ai/api/cudf/latest/user_guide/api_docs/api/cudf.from_dlpack/)
 
 using the following provider objects with devices:
 
-- Numpy [ndarray](https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html), CPU
-- Torch [Tensor](https://pytorch.org/docs/stable/tensors.html), CPU and CUDA
-- CuPy [ndarray](https://docs.cupy.dev/en/stable/reference/generated/cupy.ndarray.html), CUDA
-- [Numba](https://numba.pydata.org/) [DeviceNDArray](https://numba.readthedocs.io/en/stable/cuda/cuda_array_interface.html#numba.cuda.as_cuda_array), CUDA
-- Jax [Array](https://jax.readthedocs.io/en/latest/_autosummary/jax.Array.html), CPU and CUDA
-- Tensorflow [Tensor](https://www.tensorflow.org/api_docs/python/tf/Tensor), CPU
-- Python [bytes](https://docs.python.org/3/library/stdtypes.html#bytes), CPU
-- Python [bytearray](https://docs.python.org/3/library/stdtypes.html#bytearray), CPU
-- Python [array](https://docs.python.org/3/library/array.html), CPU
-- Numpy [memmap](https://numpy.org/doc/stable/reference/generated/numpy.memmap.html), CPU
-- Python [mmap](https://docs.python.org/3/library/mmap.html), CPU
+- Numpy [`ndarray`](https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html), CPU
+- Torch [`Tensor`](https://pytorch.org/docs/stable/tensors.html), CPU and CUDA
+- CuPy [`ndarray`](https://docs.cupy.dev/en/stable/reference/generated/cupy.ndarray.html), CUDA
+- [Numba](https://numba.pydata.org/) [`DeviceNDArray`](https://numba.readthedocs.io/en/stable/cuda/cuda_array_interface.html#numba.cuda.as_cuda_array), CUDA
+- Jax [`Array`](https://jax.readthedocs.io/en/latest/_autosummary/jax.Array.html), CPU and CUDA
+- Tensorflow [`Tensor`](https://www.tensorflow.org/api_docs/python/tf/Tensor), CPU
+- Python [`bytes`](https://docs.python.org/3/library/stdtypes.html#bytes), CPU
+- Python [`bytearray`](https://docs.python.org/3/library/stdtypes.html#bytearray), CPU
+- Python [`array`](https://docs.python.org/3/library/array.html), CPU
+- Numpy [`memmap`](https://numpy.org/doc/stable/reference/generated/numpy.memmap.html), CPU
+- Python [`mmap`](https://docs.python.org/3/library/mmap.html), CPU
 
 Install
 -------
 
-- [pydlpack Conda Forge](https://github.com/conda-forge/pydlpack-feedstock)
+- [pydlpack in conda-forge](https://github.com/conda-forge/pydlpack-feedstock)
   ```sh
   conda install pydlpack
   ```

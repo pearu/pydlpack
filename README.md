@@ -5,7 +5,7 @@ pydlpack
 
 PyDLPack is a Python library for exchanging data between different
 array libraries using [DLPack: Open In Memory Tensor
-Structure]((https://github.com/dmlc/dlpack/). The provider library
+Structure](https://github.com/dmlc/dlpack/). The provider library
 does not need to implement the DLPack support, it will be sufficent if
 the provider library implements one of the following protocols:
 
